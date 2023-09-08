@@ -1,0 +1,84 @@
+body {
+    background-color: rgb(34, 24, 24);
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+header{
+ color: white;
+ padding: 10px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+.filter-buttons {
+    margin: 1em;
+}
+
+.filter-buttons button {
+
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  color: #000;
+  border: 3px solid;
+  margin-left: 0.5em;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.filter-buttons button:hover {
+    transform: scale(1.04);
+    transition: 0.5s;
+    
+}
+
+.filter-buttons button:active {
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+@media (min-width: 768px) {
+    .filter-buttons button {
+    padding: 0.25em 0.75em;
+  }
+}
+
+
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+}
+
+.image {
+    margin: 0.5%;
+    width: 600px; 
+    height: 375px;
+    border: solid 10px rgb(71, 69, 69);
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.image:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+    transition: 0.5s;
+}
+
+.image img {
+    width: 100%; /* Ajusta a largura da imagem para preencher o container */
+    height: 100%; /* Ajusta a altura da imagem para preencher o container */
+    object-fit: cover; /* Mantém a proporção da imagem e corta o excesso para preencher */
+}
+
