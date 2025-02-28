@@ -1,27 +1,64 @@
-const imagesData = [
-    { src: './wallpapers/bleach.jpg', category: 'animes' },
-    { src: './wallpapers/fgo.jpg', category: 'animes' },
-    { src: './wallpapers/bleachBlood.jpg', category: 'animes' },
-    { src: './wallpapers/saoSwords.png', category: 'animes' },
-    { src: './wallpapers/pokemon.jpg', category: 'animes' },
-    { src: './wallpapers/cass.jpg', category: 'series' },
-    { src: './wallpapers/mandal.jpg', category: 'series' },
-    { src: './wallpapers/thewitcher.jpeg', category: 'series' },
-    { src: './wallpapers/tlou.jpeg', category: 'series' },
-    { src: './wallpapers/tlou2.jpeg', category: 'series' },
-    { src: './wallpapers/twddead.jpeg', category: 'series' },
-    { src: './wallpapers/val.jpeg', category: 'games' },
-    { src: './wallpapers/ow.jpg', category: 'games' },
-    { src: './wallpapers/star.jpeg', category: 'games' },
-    { src: './wallpapers/lol.png', category: 'games' },
-    { src: './wallpapers/gi.png', category: 'games' },
-    { src: './wallpapers/assassin.jpg', category: 'games' },
-];
+let currentPage = 1;
+const imagesPerPage = 12;
+const rawgApiKey = 'f31313bbfbbc43929361d3e507ea163d';
+let currentCategory = 'all';
 
-function generateImageElements(imagesData) {
+async function fetchAnimeImages(page = 1) {
+    try {
+        const response = await fetch(`https://nekos.best/api/v2/neko?amount=${imagesPerPage}&page=${page}`);
+        const data = await response.json();
+        console.log('Anime API response:', data);
+        return data.results.map(item => ({
+            src: item.url,
+            category: 'anime'
+        }));
+    } catch (error) {
+        console.error('Error fetching anime images:', error);
+        return [];
+    }
+}
+
+async function fetchGameImages(page = 1) {
+    try {
+        const response = await fetch(`https://api.rawg.io/api/games?key=${rawgApiKey}&page_size=${imagesPerPage}&page=${page}`);
+        const data = await response.json();
+        console.log('Game API response:', data); 
+        return shuffleArray(data.results.map(item => ({
+            src: item.background_image,
+            category: 'games'
+        })));
+    } catch (error) {
+        console.error('Error fetching game images:', error);
+        return [];
+    }
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+async function generateImageElements(page = 1, category = 'anime') {
     const gallery = document.querySelector('.image-gallery');
+    gallery.innerHTML = ''; 
+    let images = [];
 
-    imagesData.forEach(image => {
+    if (category === 'anime') {
+        images = await fetchAnimeImages(page);
+    } else if (category === 'games') {
+        images = await fetchGameImages(page);
+    } else if (category === 'all') {
+        const animeImages = await fetchAnimeImages(page);
+        const gameImages = await fetchGameImages(page);
+        images = shuffleArray([...animeImages, ...gameImages]);
+    }
+
+    console.log('Images to display:', images);
+
+    images.forEach(image => {
         const div = document.createElement('div');
         div.className = `image ${image.category}`;
 
@@ -37,20 +74,17 @@ function generateImageElements(imagesData) {
     });
 }
 
-generateImageElements(imagesData);
+function updateImages() {
+    currentPage++;
+    generateImageElements(currentPage, currentCategory);
+}
 
-
+generateImageElements();
 
 function filterImages(category) {
-    const images = document.querySelectorAll('.image');
-    
-    images.forEach(image => {
-        if (category === 'all' || image.classList.contains(category)) {
-            image.style.display = 'block';
-        } else {
-            image.style.display = 'none';
-        }
-    });
+    currentPage = 1;
+    currentCategory = category;
+    generateImageElements(currentPage, category);
 }
 
 function abrirImagem(){}

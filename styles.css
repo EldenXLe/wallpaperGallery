@@ -62,8 +62,8 @@ h1 {
 
 .image {
     margin: 0.5%;
-    width: 600px; 
-    height: 375px;
+    width: 400px; 
+    height: 500px;
     border: solid 10px rgb(190, 190, 190);
     border-radius: 10px;
     position: relative;
@@ -81,6 +81,23 @@ h1 {
     height: 100%; 
     object-fit: cover; 
 }
+
+.update-button {
+    display: flex;
+    justify-content: right;
+    margin: 1em;
+}
+
+.update-button button {
+    cursor: pointer;
+    font-size: 30px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    margin-right: 70px;
+}
+
+
 
 @media (max-width: 767px) {
     .image {
